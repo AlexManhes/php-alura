@@ -1,60 +1,45 @@
 <?php
 
-require __DIR__ .  "/src/funcoes.php";
+require_once __DIR__ . '/src/Modelo/Genero.php';
+require_once __DIR__ . '/src/Modelo/Titulo.php';
+require_once __DIR__ . '/src/Modelo/Filme.php';
+require_once __DIR__ . '/src/Modelo/Serie.php';
+require_once __DIR__ . '/src/Calculos/CalculadoraDeMaratona.php';
 
-echo "Bem-vindo(a) ao screen match!\n";
+echo "Bem-vindo(a) ao ScreenMach\n";
 
-$nomeFilme = "Top Gun - Maverick";
+$filme = new Filme(
+    'Top Gun - Maverick',
+    2022,
+    Genero::SuperHeroi,
+    180
+);
 
-$anoLancamento = 2022;
+$filme->avalia(10);
+$filme->avalia(6);
+$filme->avalia(7.8);
+$filme->avalia(8.2);
 
-$quantidadeDeNotas = $argc - 1;
-$notas = [];
+var_dump($filme);
 
-for ($contador = 1; $contador < $argc; $contador++) {
-    $notas[] = (float) $argv[$contador];
-}
+echo 'Filme:' . "\n";
 
-$notaFilme = array_sum($notas) / $quantidadeDeNotas;
-$planoPrime = true;
+echo $filme->nome . "\n";
+echo $filme->media() . "\n";
+echo $filme->anoLancamento . "\n";
 
-$incluidoNoPlano = incluidoNoPlano($planoPrime, $anoLancamento);
+echo 'Serie: '."\n";
 
-echo "Nome do filme: " . $nomeFilme . "\n";
-echo "Nota do filme: $notaFilme\n";
-echo "Ano de lançamento: $anoLancamento\n";
+$serie = new Serie('Lost', 2007, Genero::Drama, 10, 20, 30);
 
-exibeMensagemLancamento($anoLancamento);
+echo $serie->nome . "\n";
+echo $serie->anoLancamento . "\n";
+$serie->avalia(8);
+echo $serie->media() . "\n";
 
-$genero = match ($nomeFilme) {
-    "Top Gun - Maverick" => "ação",
-    "Thor: Ragnarok" => "super-herói",
-    "Se beber não case" => "comédia",
-    default => "gênero desconhecido",
-};
+$calculadora = new CalculadoraDeMaratona();
 
-echo "O gênero do filme é: $genero\n";
-
-$filme = criaFilme( 
-    nome: "Thor: Ragnarok", 
-    anoLancamento: 2021,
-    nota: 7.8, 
-    genero: "super-herói");
-
-
-echo $filme["ano"];
-
-var_dump($notas);
-sort($notas);
-var_dump($notas);
-$menorNota = min($notas);
-echo $menorNota;
-
-var_dump($filme['nome']);
-$posicaoDoisPontos = strpos($filme['nome'], ':');
-var_dump($posicaoDoisPontos );
-
-var_dump(substr($filme['nome'], 0, $posicaoDoisPontos));
-
-$filmeComoStringJson = json_encode($filme);
-file_put_contents(__DIR__ . '/filme.json', $filmeComoStringJson);
+$calculadora->inclui($filme);
+$calculadora->inclui($serie);
+$duracao = $calculadora->duracao();
+echo"Duração da maratona: ". $duracao ;
